@@ -255,13 +255,19 @@ rlm/
 |   +-- 20260422_150300/    # One directory per session (timestamp ID)
 |       |-- rlm_log.jsonl       # Token usage log
 |       +-- rlm_repl_log.jsonl  # Full REPL trace log
-+-- rlm/                    # Core library package
-    |-- __init__.py          # Package init; exports RLMEngine
-    |-- config.py            # Configuration, .env loader, constants
-    |-- engine.py            # RLMEngine: the recursive query loop
-    |-- prompts.py           # System prompt and few-shot examples
-    |-- repl.py              # Sandboxed Python REPL for code execution
-    +-- logging.py           # Console logger, TokenTracker, ReplLogger
+|-- rlm/                    # Core library package
+|   |-- __init__.py          # Package init; exports RLMEngine
+|   |-- config.py            # Configuration, .env loader, constants
+|   |-- engine.py            # RLMEngine: the recursive query loop
+|   |-- prompts.py           # System prompt and few-shot examples
+|   |-- repl.py              # Sandboxed Python REPL for code execution
+|   +-- logging.py           # Console logger, TokenTracker, ReplLogger
++-- frontend/               # React trajectory explorer
+    |-- src/
+    |   |-- components/      # FileUploader, QueryList, TrajectoryView, TokenChart
+    |   |-- parser.ts        # JSONL parsing and session builder
+    |   +-- types.ts         # TypeScript types for log events
+    +-- package.json
 ```
 
 ---
@@ -295,6 +301,24 @@ A full trace of every event in the REPL loop. Event types:
 | `subcall` | depth, snippet length, sub-question |
 
 This log lets you replay exactly what the model did: what code it wrote, what output it saw, and how it arrived at its answer.
+
+---
+
+## Trajectory Explorer (Frontend)
+
+A React-based UI for exploring RLM session logs. Visualize the model's reasoning: every code block it wrote, every output it saw, recursive sub-calls, and the final answer -- all on an interactive timeline.
+
+```bash
+cd frontend
+npm install
+npm start        # http://localhost:3000
+```
+
+Drop a session log directory (from `logs/{session_id}/`) or select the JSONL files to load a session. The UI shows:
+
+- **Query sidebar** -- all questions in the session with iteration count and token usage
+- **Trajectory timeline** -- step-by-step view of code, output, errors, sub-calls, and final answer
+- **Token chart** -- per-call prompt vs completion token breakdown
 
 ---
 
