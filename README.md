@@ -251,9 +251,10 @@ rlm/
 |-- .env.example            # Example environment configuration
 |-- LICENSE                 # CC BY 4.0 license
 |-- README.md               # This file
-|-- logs/                   # Auto-created; per-session JSONL logs
-|   |-- rlm_log.jsonl       # Token usage log
-|   +-- rlm_repl_log.jsonl  # Full REPL trace log
+|-- logs/                   # Auto-created; per-session subdirectories
+|   +-- 20260422_150300/    # One directory per session (timestamp ID)
+|       |-- rlm_log.jsonl       # Token usage log
+|       +-- rlm_repl_log.jsonl  # Full REPL trace log
 +-- rlm/                    # Core library package
     |-- __init__.py          # Package init; exports RLMEngine
     |-- config.py            # Configuration, .env loader, constants
@@ -267,7 +268,7 @@ rlm/
 
 ## Logging
 
-Every session produces two JSONL log files in the `logs/` directory:
+Each session creates its own directory under `logs/` using a timestamp-based session ID (e.g. `logs/20260422_150300/`). Each session directory contains two JSONL files:
 
 ### Token log (`rlm_log.jsonl`)
 
@@ -284,16 +285,16 @@ This log is useful for monitoring cost and understanding how many calls a questi
 
 A full trace of every event in the REPL loop. Event types:
 
-| Event       | Fields                                           |
-|-------------|--------------------------------------------------|
-| `question`  | depth, model, question text                      |
-| `code`      | depth, iteration, model, the Python code executed |
-| `output`    | depth, iteration, model, execution output, whether truncated |
-| `answer`    | depth, iteration, model, token counts, final answer text |
-| `error`     | depth, iteration, error message                  |
-| `subcall`   | depth, snippet length, sub-question              |
+| Event | Fields |
+|---|---|
+| `question` | depth, model, question text |
+| `code` | depth, iteration, model, the Python code executed |
+| `output` | depth, iteration, model, execution output, whether truncated |
+| `answer` | depth, iteration, model, token counts, final answer text |
+| `error` | depth, iteration, error message |
+| `subcall` | depth, snippet length, sub-question |
 
-This log lets you replay exactly what the model did: what code it wrote, what output it saw, and how it arrived at its answer. Both logs use session IDs (timestamp-based) so multiple sessions append cleanly to the same files.
+This log lets you replay exactly what the model did: what code it wrote, what output it saw, and how it arrived at its answer.
 
 ---
 
