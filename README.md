@@ -93,7 +93,7 @@ RLM takes a different approach:
 
 ```bash
 # Clone the repository
-git clone <repo-url>
+git clone https://github.com/yonas-g/rlm.git
 cd rlm
 
 # Configure your API key
